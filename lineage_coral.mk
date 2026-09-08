@@ -13,7 +13,28 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_system.mk)
 
 # Enable mainline checking
-PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := strict
+#
+# "relaxed" rather than "strict", matching device/google/sunfish/aosp_sunfish.mk:24.
+# Both levels still error when the device produces files inside generic_system.mk's
+# artifact path requirement (build/make/core/artifact_path_requirements.mk:56) --
+# that check is the one that matters, and it is satisfied properly by the
+# PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST additions in device-common.mk.
+#
+# Only "true"/"strict" additionally error on allowed-list entries that go unused
+# (same file, line 58). Ours are unused because vendor/lineage/config/common.mk and
+# evolution.mk allowlist backuptool_ab.* and preloaded-classes for every device,
+# and this product does not install them:
+#
+#     internal error: Device makefile includes redundant artifact path requirement
+#     allowed list entries in build/make/target/product/generic_system.mk.
+#         system/bin/backuptool_ab.functions
+#         system/bin/backuptool_ab.sh
+#         system/bin/backuptool_postinstall.sh
+#         system/etc/preloaded-classes
+#
+# Those entries live in shared vendor/lineage config used by other devices, so
+# removing them there to satisfy this product would be the wrong fix.
+PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := relaxed
 
 #
 # All components inherited here go to system_ext image
