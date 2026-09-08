@@ -524,3 +524,14 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/wifi_concurrency_cfg.txt:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wifi_concurrency_cfg.txt \
     $(LOCAL_PATH)/configs/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/firmware/wlan/qca_cld/WCNSS_qcom_cfg.ini \
     $(LOCAL_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
+
+# ECO Service. coral inherits $(SRC_TARGET_DIR)/product/generic_system.mk directly
+# (lineage_coral.mk), which enforces artifact path requirements on system/. These
+# four land in system/lib*/ and must be allowed or soong bootstrap fails with
+# "Device makefile produces files inside generic_system.mk's artifact path
+# requirement". sunfish does not hit this because it goes via aosp_sunfish.mk.
+PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
+    system/lib/libcodec2_hidl@1.0.so \
+    system/lib/libcodec2_hidl_plugin_stub.so \
+    system/lib64/libcodec2_hidl@1.0.so \
+    system/lib64/libcodec2_hidl_plugin_stub.so
