@@ -180,7 +180,7 @@ PRODUCT_SET_DEBUGFS_RESTRICTIONS := true
 
 # Default Permissions
 PRODUCT_COPY_FILES += \
-    device/google/coral/configs/permissions/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml
+    device/google/coral/configs/permissions/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions_coral.xml
 
 # Display
 $(call soong_config_set,qtidisplay,drmpp,true)
