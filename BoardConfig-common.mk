@@ -81,18 +81,27 @@ BOARD_GOOGLE_DYNAMIC_PARTITIONS_PARTITION_LIST := \
     system \
     system_ext \
     vendor
+# EROFS on all four logical partitions, matching sunfish. Not a size/perf
+# preference: with ext4 the four images summed to 6.24GB against a hard
+# 4.88GB ceiling (BOARD_SUPER_PARTITION_SIZE / 2) and check_partition_sizes
+# failed the build. The content is legitimate GApps (Velvet 340MB, GmsCore
+# 260MB, Bugle 154MB, ...), so compressing is the fix rather than dropping
+# packages. EROFS took sunfish's product from 5.26GB to 3.08GB, ~41%.
+# persist stays ext4 -- it is a physical read-write partition, not logical.
+BOARD_EROFS_PCLUSTER_SIZE := 262144
 BOARD_GOOGLE_DYNAMIC_PARTITIONS_SIZE := 4873781248 # BOARD_SUPER_PARTITION_SIZE / 2 - 4MB
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
-BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := erofs
 BOARD_ROOT_EXTRA_SYMLINKS := /mnt/vendor/persist:/persist
 BOARD_SUPER_PARTITION_ERROR_LIMIT := 9651093504 # BOARD_SUPER_PARTITON_SIZE - 100MB
 BOARD_SUPER_PARTITION_GROUPS := google_dynamic_partitions
 BOARD_SUPER_PARTITION_SIZE := 9755951104
-BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := erofs
 BOARD_USES_METADATA_PARTITION := true
 BOARD_USES_RECOVERY_AS_BOOT := true
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs
 TARGET_USERIMAGES_USE_F2FS := true
 
 # Platform
