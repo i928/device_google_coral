@@ -276,4 +276,23 @@
             <instance>default</instance>
         </interface>
     </hal>
+    <!-- Pixel display HAL. The device manifest declares
+         com.google.hardware.pixel.display.IDisplay/default via the
+         pixel-display-default.xml vintf fragment owned by
+         hardware/qcom/sm8150/display/sdm/libs/hwc2, so hwcomposer serves this
+         interface in-process rather than from its own service binary. Without
+         a matching entry here check_vintf fails the build with "in the device
+         manifest but not specified in framework compatibility matrix".
+
+         optional="false" deliberately, matching sunfish: the composer needs
+         this service actually present, not merely permitted. optional="true"
+         satisfies the VINTF build check but lets the framework skip starting
+         it, and hwcomposer then aborts in DisplayInit(). -->
+    <hal format="aidl" optional="false">
+        <name>com.google.hardware.pixel.display</name>
+        <interface>
+            <name>IDisplay</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
 </compatibility-matrix>
